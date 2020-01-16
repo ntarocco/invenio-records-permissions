@@ -33,6 +33,9 @@ def rdm_records_filter():
         return Q()
 
 
+# TODO: Move this to invenio-rdm-records and
+#       * have it provide the permissions OR
+#       * rely on app's current_search for tests
 class RecordsSearch(RecordsSearch):
     """Search class for RDM records."""
 

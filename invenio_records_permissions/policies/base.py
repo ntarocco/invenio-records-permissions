@@ -42,10 +42,6 @@ class BasePermissionPolicy(Permission):
     The class defines the overall policy and the instance encapsulates the
     permissions for an *action* *over* a set of objects.
 
-    NOTE: :method:`invenio_access.permissions.Permission._load_permissions()`
-          used in :method:`needs` adds the superuser_access (if tied to a User
-          or Role) for us.
-
     If `can_<self.action>`
         is not defined, no one is allowed (Disable()).
         is an empty list, only Super Users are allowed (via NOTE above).
@@ -76,13 +72,18 @@ class BasePermissionPolicy(Permission):
 
     @property
     def needs(self):
-        """Set of generated Needs.
+        """Set of Needs granting permission.
 
-        If ANY of the Needs are matched, permission is allowed.
+        If ANY of the Needs are matched, permission is granted.
 
-        Note that this will expand ActionNeeds into the Users/Roles that
-        provide them via
-        :method:`invenio_access.permissions.Permission._load_permissions()`
+        .. note::
+
+            ``_load_permissions()`` method from `Permission
+            <https://invenio-access.readthedocs.io/en/latest/api.html
+            #invenio_access.permissions.Permission>`_ adds by default the
+            ``superuser_access`` Need (if tied to a User or Role) for us.
+            It also expands ActionNeeds into the Users/Roles that
+            provide them.
         """
         needs = [
             generator.needs(**self.over) for generator in self.generators
@@ -93,11 +94,21 @@ class BasePermissionPolicy(Permission):
 
     @property
     def excludes(self):
-        """Set of excluded Needs.
+        """Set of Needs denying permission.
 
-        NOTE: `excludes` take precedence over `needs` i.e., if the same Need
-        is in the `needs` list and the `excludes` list, then that Need is
-        excluded.
+        If ANY of the Needs are matched, permission is revoked.
+
+        .. note::
+
+            ``_load_permissions()`` method from `Permission
+            <https://invenio-access.readthedocs.io/en/latest/api.html
+            #invenio_access.permissions.Permission>`_ adds by default the
+            ``superuser_access`` Need (if tied to a User or Role) for us.
+            It also expands ActionNeeds into the Users/Roles that
+            provide them.
+
+        If the same Need is returned by `needs` and `excludes`, then that
+        Need provider is disallowed.
         """
         excludes = [
             generator.excludes(**self.over) for generator in self.generators

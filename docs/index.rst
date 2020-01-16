@@ -20,7 +20,6 @@ Invenio-Records-Permissions.
    installation
    configuration
    usage
-   examplesapp
 
 
 API Reference

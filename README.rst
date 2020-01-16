@@ -28,15 +28,3 @@ Permission policies for Invenio records.
 
 Further documentation is available on
 https://invenio-records-permissions.readthedocs.io/
-
-
-Development
-===========
-
-    pipenv install
-    pipenv run pip install -e .[tests,elasticsearch6,sqlite]  # or others you want
-
-Tests
------
-
-    pipenv run ./run-tests.sh

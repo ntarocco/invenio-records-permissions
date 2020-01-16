@@ -7,7 +7,7 @@
 # and/or modify it under the terms of the MIT License; see LICENSE file for
 # more details.
 
-"""Invenio Records Permissions Policies and Factories."""
+"""Invenio Records Permissions Policies."""
 
 from .base import BasePermissionPolicy
 from .deposits import DepositPermissionPolicy

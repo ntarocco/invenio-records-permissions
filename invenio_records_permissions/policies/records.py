@@ -43,11 +43,7 @@ def obj_or_import_string(value, default=None):
 
 
 class RecordPermissionPolicy(BasePermissionPolicy):
-    """Access control configuration for records.
-
-    Note that even if the array is empty, the invenio_access Permission class
-    always adds the ``superuser-access``, so admins will always be allowed.
-    """
+    """Access control configuration for records."""
 
     NEED_LABEL_TO_ACTION = bidict({
         'bucket-update': 'update_files',

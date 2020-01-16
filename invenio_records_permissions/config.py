@@ -7,9 +7,9 @@
 # and/or modify it under the terms of the MIT License; see LICENSE file for
 # more details.
 
-"""Permission policies for Invenio records."""
+"""Default configuration variables for invenio-records-permissions."""
 
 RECORDS_PERMISSIONS_RECORD_POLICY = (
     'invenio_records_permissions.policies.RecordPermissionPolicy'
 )
-"""PermissionPolicy used by provided permission factories."""
+"""PermissionPolicy used by provided record permission factories."""

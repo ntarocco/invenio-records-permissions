@@ -48,10 +48,13 @@ def record_delete_permission_factory(record=None):
 def record_files_permission_factory(obj, action):
     """Files permission factory for any action.
 
-    :param obj: An instance of :class:`invenio_files_rest.models.Bucket`.
+    :param obj: An instance of `invenio_files_rest.models.Bucket
+                <https://invenio-files-rest.readthedocs.io/en/latest/api.html
+                #invenio_files_rest.models.Bucket>`_.
     :param action: The required action.
     :raises RuntimeError: If the object is unknown or no record.
-    :returns: A :class:`invenio_records_permissions.policies.PermissionPolicy`
+    :returns: A
+        :class:`invenio_records_permissions.policies.base.BasePermissionPolicy`
         instance.
     """
     if isinstance(obj, Bucket):
