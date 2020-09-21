@@ -12,8 +12,8 @@
 from elasticsearch_dsl.query import Q
 
 
-def records_permission_filter(permission):
-    """Records permission filter."""
+def permission_filter(permission):
+    """Permission filter."""
     # NOTE: flask-principal overwrites __bool() and access g
     if permission is not None:
         qf = None
