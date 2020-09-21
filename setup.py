@@ -28,7 +28,7 @@ tests_require = [
 
 # Should follow inveniosoftware/invenio versions
 invenio_db_version = '>=1.0.5,<2.0.0'
-invenio_search_version = '>=1.3.1,<2.0.0'
+invenio_search_version = '>=1.4.0,<2.0.0'
 
 extras_require = {
     'elasticsearch6': [
