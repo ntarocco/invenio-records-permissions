@@ -13,4 +13,4 @@ This file is imported by ``invenio_records_permissions.__init__``,
 and parsed by ``setup.py``.
 """
 
-__version__ = '0.10.0'
+__version__ = '0.11.0'
