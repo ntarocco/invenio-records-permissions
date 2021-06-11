@@ -71,10 +71,12 @@ class SuperUser(Generator):
         """Enabling Needs."""
         return [superuser_access]
 
-    def query_filter(self, **kwargs):
+    def query_filter(self, identity=None, **kwargs):
         """Filters for current identity as super user."""
-        # TODO: Implement with new permissions metadata
-        return []
+        if superuser_access in identity.provides:
+            return Q('match_all')
+        else:
+            return []
 
 
 class SystemProcess(Generator):
@@ -88,10 +90,12 @@ class SystemProcess(Generator):
         """Enabling Needs."""
         return [system_process]
 
-    def query_filter(self, **kwargs):
+    def query_filter(self, identity=None, **kwargs):
         """Filters for current identity as system process."""
-        # TODO: Implement with new permissions metadata
-        return Q('match_all')
+        if system_process in identity.provides:
+            return Q('match_all')
+        else:
+            return []
 
 
 class Disable(Generator):
