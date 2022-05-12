@@ -20,8 +20,9 @@ from .base import BasePermissionPolicy
 
 @staticmethod
 def _unknwon_generator(class_name):
-    raise UnknownGeneratorError("Unkown need generator class. {name}".format(
-            name=class_name) + " is not one of [RecordNeedClass, NeedClass]"
+    raise UnknownGeneratorError(
+        "Unkown need generator class. {name}".format(name=class_name)
+        + " is not one of [RecordNeedClass, NeedClass]"
     )
 
 
@@ -45,9 +46,9 @@ class RecordPermissionPolicy(BasePermissionPolicy):
     """Access control configuration for records."""
 
     NEED_LABEL_TO_ACTION = {
-        'bucket-update': 'update_files',
-        'bucket-read': 'read_files',
-        'object-read': 'read_files',
+        "bucket-update": "update_files",
+        "bucket-read": "read_files",
+        "object-read": "read_files",
     }
 
     # Read access given to everyone.
@@ -68,9 +69,7 @@ class RecordPermissionPolicy(BasePermissionPolicy):
     def __init__(self, action, **over):
         """Constructor."""
         self.original_action = action
-        action = RecordPermissionPolicy.NEED_LABEL_TO_ACTION.get(
-            action, action
-        )
+        action = RecordPermissionPolicy.NEED_LABEL_TO_ACTION.get(action, action)
         super(RecordPermissionPolicy, self).__init__(action, **over)
 
 
@@ -81,6 +80,6 @@ def get_record_permission_policy():
     automatically configure functionality.
     """
     return obj_or_import_string(
-        current_app.config.get('RECORDS_PERMISSIONS_RECORD_POLICY'),
-        default=RecordPermissionPolicy
+        current_app.config.get("RECORDS_PERMISSIONS_RECORD_POLICY"),
+        default=RecordPermissionPolicy,
     )

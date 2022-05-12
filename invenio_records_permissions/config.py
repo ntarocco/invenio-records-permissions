@@ -10,6 +10,6 @@
 """Default configuration variables for invenio-records-permissions."""
 
 RECORDS_PERMISSIONS_RECORD_POLICY = (
-    'invenio_records_permissions.policies.RecordPermissionPolicy'
+    "invenio_records_permissions.policies.RecordPermissionPolicy"
 )
 """PermissionPolicy for records."""

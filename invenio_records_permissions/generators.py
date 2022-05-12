@@ -16,8 +16,12 @@ from itertools import chain
 
 from elasticsearch_dsl.query import Q
 from flask_principal import ActionNeed, UserNeed
-from invenio_access.permissions import any_user, authenticated_user, \
-    superuser_access, system_process
+from invenio_access.permissions import (
+    any_user,
+    authenticated_user,
+    superuser_access,
+    system_process,
+)
 from invenio_records.api import Record
 
 
@@ -57,7 +61,7 @@ class AnyUser(Generator):
     def query_filter(self, **kwargs):
         """Match all in search."""
         # TODO: Implement with new permissions metadata
-        return Q('match_all')
+        return Q("match_all")
 
 
 class SuperUser(Generator):
@@ -74,7 +78,7 @@ class SuperUser(Generator):
     def query_filter(self, identity=None, **kwargs):
         """Filters for current identity as super user."""
         if superuser_access in identity.provides:
-            return Q('match_all')
+            return Q("match_all")
         else:
             return []
 
@@ -93,7 +97,7 @@ class SystemProcess(Generator):
     def query_filter(self, identity=None, **kwargs):
         """Filters for current identity as system process."""
         if system_process in identity.provides:
-            return Q('match_all')
+            return Q("match_all")
         else:
             return []
 
@@ -111,7 +115,7 @@ class Disable(Generator):
 
     def query_filter(self, **kwargs):
         """Match None in search."""
-        return ~Q('match_all')
+        return ~Q("match_all")
 
 
 class Admin(Generator):
@@ -123,7 +127,7 @@ class Admin(Generator):
 
     def needs(self, **kwargs):
         """Enabling Needs."""
-        return [ActionNeed('admin-access')]
+        return [ActionNeed("admin-access")]
 
 
 class RecordOwners(Generator):
@@ -131,13 +135,13 @@ class RecordOwners(Generator):
 
     def needs(self, record=None, **kwargs):
         """Enabling Needs."""
-        return [UserNeed(owner) for owner in record.get('owners', [])]
+        return [UserNeed(owner) for owner in record.get("owners", [])]
 
     def query_filter(self, identity=None, **kwargs):
         """Filters for current identity as owner."""
         for need in identity.provides:
-            if need.method == 'id':
-                return Q('term', owners=need.value)
+            if need.method == "id":
+                return Q("term", owners=need.value)
         return []
 
 
@@ -149,9 +153,8 @@ class AnyUserIfPublic(Generator):
 
     def needs(self, record=None, **kwargs):
         """Enabling Needs."""
-        is_restricted = (
-            record and
-            record.get('_access', {}).get('metadata_restricted', False)
+        is_restricted = record and record.get("_access", {}).get(
+            "metadata_restricted", False
         )
         return [any_user] if not is_restricted else []
 
@@ -162,7 +165,7 @@ class AnyUserIfPublic(Generator):
     def query_filter(self, **kwargs):
         """Filters for non-restricted records."""
         # TODO: Implement with new permissions metadata
-        return Q('term', **{"_access.metadata_restricted": False})
+        return Q("term", **{"_access.metadata_restricted": False})
 
 
 class AuthenticatedUser(Generator):
@@ -179,7 +182,7 @@ class AuthenticatedUser(Generator):
     def query_filter(self, **kwargs):
         """Filters for current identity as super user."""
         # TODO: Implement with new permissions metadata
-        return Q('match_all')
+        return Q("match_all")
 
 
 class AllowedByAccessLevel(Generator):
@@ -191,13 +194,13 @@ class AllowedByAccessLevel(Generator):
     # 'files_curator'
     # 'admin'
     ACTION_TO_ACCESS_LEVELS = {
-        'create': [],
-        'read': ['metadata_curator'],
-        'update': ['metadata_curator'],
-        'delete': []
+        "create": [],
+        "read": ["metadata_curator"],
+        "update": ["metadata_curator"],
+        "delete": [],
     }
 
-    def __init__(self, action='read'):
+    def __init__(self, action="read"):
         """Constructor."""
         self.action = action
 
@@ -207,28 +210,31 @@ class AllowedByAccessLevel(Generator):
             return []
 
         access_levels = AllowedByAccessLevel.ACTION_TO_ACCESS_LEVELS.get(
-            self.action, [])
+            self.action, []
+        )
 
         # Name "identity" is used bc it correlates with flask-principal
         # identity while not being one.
-        allowed_identities = chain.from_iterable([
-            record.get('internal', {})
-                  .get('access_levels', {})
-                  .get(access_level, [])
-            for access_level in access_levels
-        ])
+        allowed_identities = chain.from_iterable(
+            [
+                record.get("internal", {})
+                .get("access_levels", {})
+                .get(access_level, [])
+                for access_level in access_levels
+            ]
+        )
 
         return [
-            UserNeed(identity.get('id')) for identity in allowed_identities
-            if identity.get('scheme') == 'person' and identity.get('id')
+            UserNeed(identity.get("id"))
+            for identity in allowed_identities
+            if identity.get("scheme") == "person" and identity.get("id")
             # TODO: Implement other schemes
         ]
 
     def query_filter(self, identity=None, **kwargs):
         """Search filter for the current user with this generator."""
         id_need = next(
-            (need for need in identity.provides if need.method == 'id'),
-            None
+            (need for need in identity.provides if need.method == "id"), None
         )
 
         if not id_need:
@@ -236,19 +242,24 @@ class AllowedByAccessLevel(Generator):
 
         # To get the record in the search results, the access level must
         # have been put in the 'read' array
-        read_levels = AllowedByAccessLevel.ACTION_TO_ACCESS_LEVELS.get(
-            'read', [])
+        read_levels = AllowedByAccessLevel.ACTION_TO_ACCESS_LEVELS.get("read", [])
 
         queries = [
-            Q('term', **{
-                "internal.access_levels.{}".format(access_level): {
-                    "scheme": "person", "id": id_need.value
-                    # TODO: Implement other schemes
+            Q(
+                "term",
+                **{
+                    "internal.access_levels.{}".format(access_level): {
+                        "scheme": "person",
+                        "id": id_need.value
+                        # TODO: Implement other schemes
+                    }
                 }
-            }) for access_level in read_levels
+            )
+            for access_level in read_levels
         ]
 
         return reduce(operator.or_, queries)
+
 
 #
 # | Meta Restricted | Files Restricted | Access Right | Result |

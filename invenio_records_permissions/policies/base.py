@@ -65,7 +65,7 @@ class BasePermissionPolicy(Permission):
 
         Defaults to Disable() if no can_<self.action> defined.
         """
-        return getattr(self.__class__, 'can_' + self.action, [Disable()])
+        return getattr(self.__class__, "can_" + self.action, [Disable()])
 
     @property
     def needs(self):
@@ -82,9 +82,7 @@ class BasePermissionPolicy(Permission):
             It also expands ActionNeeds into the Users/Roles that
             provide them.
         """
-        needs = [
-            generator.needs(**self.over) for generator in self.generators
-        ]
+        needs = [generator.needs(**self.over) for generator in self.generators]
         self.explicit_needs |= set(chain.from_iterable(needs))
         self._load_permissions()  # self.explicit_needs is used here
         return self._permissions.needs
@@ -107,9 +105,7 @@ class BasePermissionPolicy(Permission):
         If the same Need is returned by `needs` and `excludes`, then that
         Need provider is disallowed.
         """
-        excludes = [
-            generator.excludes(**self.over) for generator in self.generators
-        ]
+        excludes = [generator.excludes(**self.over) for generator in self.generators]
         self.explicit_excludes |= set(chain.from_iterable(excludes))
         self._load_permissions()  # self.explicit_excludes is used here
         return self._permissions.excludes
@@ -121,8 +117,5 @@ class BasePermissionPolicy(Permission):
         These filters consist of additive queries mapping to what the current
         user should be able to retrieve via search.
         """
-        filters = [
-            generator.query_filter(**self.over)
-            for generator in self.generators
-        ]
+        filters = [generator.query_filter(**self.over) for generator in self.generators]
         return [f for f in filters if f]

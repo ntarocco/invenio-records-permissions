@@ -21,7 +21,7 @@ from invenio_app.factory import create_app as _create_app
 from invenio_records.api import Record
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def celery_config():
     """Override pytest-invenio fixture.
 
@@ -30,7 +30,7 @@ def celery_config():
     return {}
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def create_app():
     """Application factory fixture."""
     return _create_app
@@ -64,6 +64,7 @@ def create_record():
 
     It provides a default value for each required field.
     """
+
     def _create_record(metadata=None):
         # TODO: Modify according to record schema
         metadata = metadata or {}
@@ -71,7 +72,7 @@ def create_record():
             "_access": {
                 # TODO: Remove if "access_right" includes it
                 "metadata_restricted": False,
-                "files_restricted": False
+                "files_restricted": False,
             },
             "access_right": "open",
             "title": "This is a record",
@@ -79,7 +80,7 @@ def create_record():
             "owners": [1, 2, 3],
             "internal": {
                 "access_levels": {},
-            }
+            },
         }
         record.update(metadata)
         return record
@@ -93,6 +94,7 @@ def create_real_record(create_record, location):
 
     This is needed for tests relying on database and ES operations.
     """
+
     def _create_real_record(metadata=None):
         record_dict = create_record(metadata)
 

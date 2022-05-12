@@ -17,11 +17,11 @@ from invenio_records_permissions.policies import BasePermissionPolicy
 def test_base_permission_policy_generators(app):
     policy = BasePermissionPolicy
 
-    for action in ['search', 'read', 'update', 'delete']:
+    for action in ["search", "read", "update", "delete"]:
         generators = policy(action=action).generators
         assert len(generators) == 0
 
-    assert isinstance(policy(action='random').generators[0], Disable)
+    assert isinstance(policy(action="random").generators[0], Disable)
 
 
 class TestPermissionPolicy(BasePermissionPolicy):
@@ -34,22 +34,22 @@ class TestPermissionPolicy(BasePermissionPolicy):
 def test_permission_policy_generators(app):
     policy = TestPermissionPolicy
 
-    assert isinstance(policy(action='create').generators[0], AnyUser)
-    assert isinstance(policy(action='search').generators[0], AnyUser)
-    assert isinstance(policy(action='read').generators[0], AnyUser)
-    assert isinstance(policy(action='foo_bar').generators[0], AnyUser)
-    assert len(policy(action='update').generators) == 0
-    assert len(policy(action='delete').generators) == 0
-    assert isinstance(policy(action='random').generators[0], Disable)
+    assert isinstance(policy(action="create").generators[0], AnyUser)
+    assert isinstance(policy(action="search").generators[0], AnyUser)
+    assert isinstance(policy(action="read").generators[0], AnyUser)
+    assert isinstance(policy(action="foo_bar").generators[0], AnyUser)
+    assert len(policy(action="update").generators) == 0
+    assert len(policy(action="delete").generators) == 0
+    assert isinstance(policy(action="random").generators[0], Disable)
 
 
 def test_permission_policy_needs_excludes(superuser_role_need):
-    create_perm = TestPermissionPolicy(action='create')
-    list_perm = TestPermissionPolicy(action='search')
-    read_perm = TestPermissionPolicy(action='read')
-    update_perm = TestPermissionPolicy(action='update')
-    delete_perm = TestPermissionPolicy(action='delete')
-    foo_bar_perm = TestPermissionPolicy(action='foo_bar')
+    create_perm = TestPermissionPolicy(action="create")
+    list_perm = TestPermissionPolicy(action="search")
+    read_perm = TestPermissionPolicy(action="read")
+    update_perm = TestPermissionPolicy(action="update")
+    delete_perm = TestPermissionPolicy(action="delete")
+    foo_bar_perm = TestPermissionPolicy(action="foo_bar")
 
     assert create_perm.needs == {superuser_role_need, any_user}
     assert create_perm.excludes == set()

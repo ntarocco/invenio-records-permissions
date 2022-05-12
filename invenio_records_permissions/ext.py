@@ -24,16 +24,16 @@ class InvenioRecordsPermissions(object):
     def init_app(self, app):
         """Flask application initialization."""
         self.init_config(app)
-        app.extensions['invenio-records-permissions'] = self
+        app.extensions["invenio-records-permissions"] = self
 
     def init_config(self, app):
         """Initialize configuration."""
         # Use theme's base template if theme is installed
-        if 'BASE_TEMPLATE' in app.config:
+        if "BASE_TEMPLATE" in app.config:
             app.config.setdefault(
-                'RECORDS_PERMISSIONS_BASE_TEMPLATE',
-                app.config['BASE_TEMPLATE'],
+                "RECORDS_PERMISSIONS_BASE_TEMPLATE",
+                app.config["BASE_TEMPLATE"],
             )
         for k in dir(config):
-            if k.startswith('RECORDS_PERMISSIONS_'):
+            if k.startswith("RECORDS_PERMISSIONS_"):
                 app.config.setdefault(k, getattr(config, k))
