@@ -21,7 +21,7 @@ from .base import BasePermissionPolicy
 @staticmethod
 def _unknwon_generator(class_name):
     raise UnknownGeneratorError(
-        "Unkown need generator class. {name}".format(name=class_name)
+        "Unknown need generator class. {name}".format(name=class_name)
         + " is not one of [RecordNeedClass, NeedClass]"
     )
 
